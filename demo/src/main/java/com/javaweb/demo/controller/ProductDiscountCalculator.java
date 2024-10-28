@@ -1,7 +1,7 @@
 package com.javaweb.demo.controller;
 
 import com.javaweb.demo.service.IProductService;
-import com.javaweb.demo.service.ProductService;
+import com.javaweb.demo.service.impl.ProductService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
