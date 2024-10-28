@@ -13,6 +13,12 @@ public class Student {
         this.point = point;
     }
 
+    public Student(String name, String address, double point) {
+        this.name = name;
+        this.address = address;
+        this.point = point;
+    }
+
     public int getId() {
         return id;
     }

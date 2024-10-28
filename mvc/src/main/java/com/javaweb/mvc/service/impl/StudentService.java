@@ -13,4 +13,29 @@ public class StudentService implements IStudentService {
     public List<Student> findAll() {
         return studentRepository.findAll();
     }
+
+    @Override
+    public void save(Student student) {
+        studentRepository.save(student);
+    }
+
+    @Override
+    public Boolean deleteById(int id) {
+        return studentRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Student> findByName(String nameSearch) {
+        return studentRepository.findByName(nameSearch);
+    }
+
+    @Override
+    public Student findById(int id) {
+        return studentRepository.findById(id);
+    }
+
+    @Override
+    public void update(Student studentEdit) {
+        studentRepository.update(studentEdit);
+    }
 }
