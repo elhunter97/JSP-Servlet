@@ -1,6 +1,8 @@
-package com.javaweb.demo.service;
+package com.javaweb.demo.service.impl;
 
-public class ProductService implements IProductService{
+import com.javaweb.demo.service.IProductService;
+
+public class ProductService implements IProductService {
     @Override
     public double calculateDiscountAmount(double price, double discountPercent) {
         return price * discountPercent * 0.01;
