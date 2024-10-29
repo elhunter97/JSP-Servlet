@@ -3,6 +3,9 @@ package com.javaweb.mvc.repositories.impl;
 import com.javaweb.mvc.model.Student;
 import com.javaweb.mvc.repositories.IStudentRepository;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,66 +14,118 @@ public class StudentRepository implements IStudentRepository {
 
     static {
         students = new ArrayList<>();
-        students.add(new Student(1, "Hán Bảo Ngọc", "Hà Nội", 9.0));
-        students.add(new Student(2, "Trần Khánh Linh", "Bắc Ninh", 8.0));
-        students.add(new Student(3, "Hán Huệ Liên", "Hà Nội", 7.5));
-        students.add(new Student(4, "Kiều Anh Vũ", "Hà Nội", 8.5));
-        students.add(new Student(5, "Kiều Gia Hân", "Hà Nội", 9.9));
-        students.add(new Student(6, "Kiều Bảo San", "Hà Nội", 6.5));
-        students.add(new Student(7, "Hán Trần Hạo Sơn", "Hà Nội", 9.5));
-
     }
 
     @Override
     public List<Student> findAll() {
+        List<Student> students = new ArrayList<>();
+        try {
+            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("select * from student");
+            ResultSet rs = ps.executeQuery();
+            int id;
+            String name;
+            String address;
+            double point;
+            while (rs.next()) {
+                id = rs.getInt("id");
+                name = rs.getString("name");
+                address = rs.getString("address");
+                point = rs.getDouble("point");
+                students.add(new Student(id, name, address, point));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return students;
     }
 
     @Override
     public void save(Student student) {
-        student.setId(students.get(students.size() - 1).getId() + 1);
-        students.add(student);
+        try {
+            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("insert into student(name,address,point) values(?,?,?)");
+            ps.setString(1, student.getName());
+            ps.setString(2, student.getAddress());
+            ps.setDouble(3, student.getPoint());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Boolean deleteById(int id) {
-        for (Student student : students) {
-            if (student.getId() == id) {
-                students.remove(student);
-                return true;
-            }
+        boolean isDelete = false;
+        try {
+            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("delete from student where id=?");
+            ps.setInt(1, id);
+            isDelete = ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return false;
+        return isDelete;
     }
 
     @Override
     public List<Student> findByName(String nameSearch) {
         List<Student> result = new ArrayList<>();
-        for (Student student : students) {
-            if (student.getName().trim().toLowerCase().contains(nameSearch.trim().toLowerCase())) {
-                result.add(student);
+        try {
+            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("select * from student where name like ?");
+            ps.setString(1, "%" + nameSearch + "%");
+            ResultSet rs = ps.executeQuery();
+            int id;
+            String name;
+            String address;
+            double point;
+            while (rs.next()) {
+                id = rs.getInt("id");
+                name = rs.getString("name");
+                address = rs.getString("address");
+                point = rs.getDouble("point");
+                result.add(new Student(id, name, address, point));
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return result;
     }
 
     @Override
     public Student findById(int id) {
-        for (Student student : students) {
-            if (student.getId() == id) {
-                return student;
+        try {
+            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("select * from student where id=?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            int idEdit;
+            String name;
+            String address;
+            double point;
+            while (rs.next()) {
+                idEdit = rs.getInt("id");
+                name = rs.getString("name");
+                address = rs.getString("address");
+                point = rs.getDouble("point");
+                return new Student(idEdit, name, address, point);
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
 
     @Override
     public void update(Student studentEdit) {
-        for (Student student : students) {
-            if (student.getId() == studentEdit.getId()) {
-                student.setName(studentEdit.getName());
-                student.setAddress(studentEdit.getAddress());
-                student.setPoint(studentEdit.getPoint());
+        Student student = findById(studentEdit.getId());
+        if (student != null) {
+            try {
+                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("update student set name=?,address=?,point=? where id=?");
+                ps.setString(1, studentEdit.getName());
+                ps.setString(2, studentEdit.getAddress());
+                ps.setDouble(3, studentEdit.getPoint());
+                ps.setInt(4, studentEdit.getId());
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
     }

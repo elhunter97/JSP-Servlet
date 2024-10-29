@@ -89,13 +89,10 @@ public class StudentController extends HttpServlet {
                 String nameEdit = req.getParameter("name");
                 String addressEdit = req.getParameter("address");
                 double pointEdit = Double.parseDouble(req.getParameter("point"));
-                Student studentEdit = studentService.findById(idEdit);
-                studentEdit.setName(nameEdit);
-                studentEdit.setAddress(addressEdit);
-                studentEdit.setPoint(pointEdit);
+                Student studentEdit = new Student(idEdit, nameEdit, addressEdit, pointEdit);
+                studentService.update(studentEdit);
                 resp.sendRedirect("/student");
                 break;
-
         }
 
     }
