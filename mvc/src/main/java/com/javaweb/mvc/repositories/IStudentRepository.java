@@ -16,4 +16,6 @@ public interface IStudentRepository {
     Student findById(int id);
 
     void update(Student studentEdit);
+
+    List<Student> sortByName(String sortby);
 }

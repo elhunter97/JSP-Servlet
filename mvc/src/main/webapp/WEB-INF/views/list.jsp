@@ -13,6 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 <h1>DANH SÁCH HỌC SINH</h1>
@@ -33,9 +34,9 @@
         <thead>
         <tr>
             <th>Số thứ tự</th>
-            <th>Họ & tên</th>
+            <th>Họ & tên<button class="btn bg-black border-0" onclick="window.location.href='/student?action=sort&sortby=name'"><i class="bi bi-sort-alpha-down"></i></button></th>
             <th>Địa chỉ</th>
-            <th>Điểm</th>
+            <th>Điểm<button class="btn bg-black border-0" onclick="window.location.href='/student?action=sort&sortby=point'"><i class="bi bi-sort-numeric-down"></i></button></th>
             <th>Xếp hạng</th>
             <th>Hành động</th>
         </tr>

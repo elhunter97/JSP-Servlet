@@ -34,6 +34,12 @@ public class StudentController extends HttpServlet {
                 req.setAttribute("student", student);
                 req.getRequestDispatcher("/WEB-INF/views/edit.jsp").forward(req, resp);
                 break;
+            case "sort":
+                String sortby = req.getParameter("sortby");
+                List<Student> studentsSort = studentService.sortByName(sortby);
+                req.setAttribute("students", studentsSort);
+                req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);
+                break;
             default:
                 List<Student> students = studentService.findAll();
                 req.setAttribute("students", students);

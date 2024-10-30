@@ -38,4 +38,9 @@ public class StudentService implements IStudentService {
     public void update(Student studentEdit) {
         studentRepository.update(studentEdit);
     }
+
+    @Override
+    public List<Student> sortByName(String sortby) {
+        return studentRepository.sortByName(sortby);
+    }
 }

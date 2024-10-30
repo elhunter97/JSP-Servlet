@@ -129,4 +129,24 @@ public class StudentRepository implements IStudentRepository {
             }
         }
     }
+
+    @Override
+    public List<Student> sortByName(String sortby) {
+        List<Student> students = new ArrayList<>();
+        try {
+            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("select * from student order by "+sortby);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String address = rs.getString("address");
+                double point = rs.getDouble("point");
+                students.add(new Student(id, name, address, point));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return students;
+    }
 }
