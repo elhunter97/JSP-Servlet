@@ -1,5 +1,6 @@
 package com.javaweb.mvc.service.impl;
 
+import com.javaweb.mvc.dto.StudentDTO;
 import com.javaweb.mvc.model.Student;
 import com.javaweb.mvc.repositories.IStudentRepository;
 import com.javaweb.mvc.repositories.impl.StudentRepository;
@@ -9,8 +10,9 @@ import java.util.List;
 
 public class StudentService implements IStudentService {
     IStudentRepository studentRepository = new StudentRepository();
+
     @Override
-    public List<Student> findAll() {
+    public List<StudentDTO> findAll() {
         return studentRepository.findAll();
     }
 
@@ -25,7 +27,7 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public List<Student> findByName(String nameSearch) {
+    public List<StudentDTO> findByName(String nameSearch) {
         return studentRepository.findByName(nameSearch);
     }
 
@@ -40,7 +42,7 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public List<Student> sortByName(String sortby) {
+    public List<StudentDTO> sortByName(String sortby) {
         return studentRepository.sortByName(sortby);
     }
 }

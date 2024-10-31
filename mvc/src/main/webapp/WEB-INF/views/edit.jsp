@@ -5,6 +5,7 @@
   Time: 12:35 AM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -31,6 +32,14 @@
             <label for="point" class="form-label">Điểm</label>
             <input type="text" class="form-control" id="point" placeholder="Điểm" name="point" value="${student.point}"
                    required>
+        </div>
+        <div class="mb-3">
+            <label for="nameclass" class="form-label">Lớp</label>
+            <select class="form-select w-auto" id="nameclass" name="nameclass" required>
+                <c:forEach var="classrooms" items="${classrooms}">
+                    <option value="${classrooms.id}" ${classrooms.id == student.id_Class ? 'selected' : ''}>${classrooms.name}</option>
+                </c:forEach>
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Cập nhật</button>
     </form>

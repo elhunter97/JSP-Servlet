@@ -1,32 +1,28 @@
-package com.javaweb.mvc.model;
+package com.javaweb.mvc.dto;
 
-public class Student {
+public class StudentDTO {
     private int id;
     private String name;
     private String address;
     private double point;
-    private int id_Class;
+    private String nameClass;
 
-    public Student(int id, String name, String address, double point) {
+    public StudentDTO() {
+    }
+
+    public StudentDTO(int id, String name, String address, double point, String nameClass) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.point = point;
+        this.nameClass = nameClass;
     }
 
-    public Student(String name, String address, double point, int id_Class) {
+    public StudentDTO(String name, String address, double point, String nameClass) {
         this.name = name;
         this.address = address;
         this.point = point;
-        this.id_Class = id_Class;
-    }
-
-    public Student(int idEdit, String name, String address, double point, int idClass) {
-        this.id = idEdit;
-        this.name = name;
-        this.address = address;
-        this.point = point;
-        this.id_Class = idClass;
+        this.nameClass = nameClass;
     }
 
     public int getId() {
@@ -61,11 +57,11 @@ public class Student {
         this.point = point;
     }
 
-    public int getId_Class() {
-        return id_Class;
+    public String getNameClass() {
+        return nameClass;
     }
 
-    public void setId_Class(int id_Class) {
-        this.id_Class = id_Class;
+    public void setNameClass(String nameClass) {
+        this.nameClass = nameClass;
     }
 }

@@ -1,5 +1,6 @@
 package com.javaweb.mvc.repositories.impl;
 
+import com.javaweb.mvc.dto.StudentDTO;
 import com.javaweb.mvc.model.Student;
 import com.javaweb.mvc.repositories.IStudentRepository;
 
@@ -17,21 +18,23 @@ public class StudentRepository implements IStudentRepository {
     }
 
     @Override
-    public List<Student> findAll() {
-        List<Student> students = new ArrayList<>();
+    public List<StudentDTO> findAll() {
+        List<StudentDTO> students = new ArrayList<>();
         try {
-            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("select * from student");
+            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("select student.id,student.name,address,point,c.name as nameClass from student join classroom c on student.id_Class = c.id");
             ResultSet rs = ps.executeQuery();
             int id;
             String name;
             String address;
             double point;
+            String nameClass;
             while (rs.next()) {
                 id = rs.getInt("id");
                 name = rs.getString("name");
                 address = rs.getString("address");
                 point = rs.getDouble("point");
-                students.add(new Student(id, name, address, point));
+                nameClass = rs.getString("nameClass");
+                students.add(new StudentDTO(id, name, address, point,nameClass));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -42,10 +45,11 @@ public class StudentRepository implements IStudentRepository {
     @Override
     public void save(Student student) {
         try {
-            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("insert into student(name,address,point) values(?,?,?)");
+            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("insert into student(name,address,point,id_Class) values(?,?,?,?)");
             ps.setString(1, student.getName());
             ps.setString(2, student.getAddress());
             ps.setDouble(3, student.getPoint());
+            ps.setInt(4,student.getId_Class());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -66,22 +70,25 @@ public class StudentRepository implements IStudentRepository {
     }
 
     @Override
-    public List<Student> findByName(String nameSearch) {
-        List<Student> result = new ArrayList<>();
+    public List<StudentDTO> findByName(String nameSearch) {
+        List<StudentDTO> result = new ArrayList<>();
         try {
-            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("select * from student where name like ?");
+            PreparedStatement ps = BaseRepository.getConnection().
+                    prepareStatement("select student.id,student.name,address,point,c.name as nameClass from student join classroom c on student.id_Class = c.id where student.name like ?");
             ps.setString(1, "%" + nameSearch + "%");
             ResultSet rs = ps.executeQuery();
             int id;
             String name;
             String address;
             double point;
+            String nameClass;
             while (rs.next()) {
                 id = rs.getInt("id");
                 name = rs.getString("name");
                 address = rs.getString("address");
                 point = rs.getDouble("point");
-                result.add(new Student(id, name, address, point));
+                nameClass= rs.getString("nameClass");
+                result.add(new StudentDTO(id, name, address, point,nameClass));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -92,19 +99,22 @@ public class StudentRepository implements IStudentRepository {
     @Override
     public Student findById(int id) {
         try {
-            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("select * from student where id=?");
+            PreparedStatement ps = BaseRepository.getConnection().
+                    prepareStatement("select * from student where id=?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             int idEdit;
             String name;
             String address;
             double point;
+            int idClass;
             while (rs.next()) {
                 idEdit = rs.getInt("id");
                 name = rs.getString("name");
                 address = rs.getString("address");
                 point = rs.getDouble("point");
-                return new Student(idEdit, name, address, point);
+                idClass = rs.getInt("id_Class");
+                return new Student(idEdit, name, address, point,idClass);
             }
 
         } catch (SQLException e) {
@@ -118,11 +128,12 @@ public class StudentRepository implements IStudentRepository {
         Student student = findById(studentEdit.getId());
         if (student != null) {
             try {
-                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("update student set name=?,address=?,point=? where id=?");
+                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("update student set name=?,address=?,point=?,id_Class=? where id=?");
                 ps.setString(1, studentEdit.getName());
                 ps.setString(2, studentEdit.getAddress());
                 ps.setDouble(3, studentEdit.getPoint());
-                ps.setInt(4, studentEdit.getId());
+                ps.setInt(4, studentEdit.getId_Class());
+                ps.setInt(5, studentEdit.getId());
                 ps.executeUpdate();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -131,17 +142,20 @@ public class StudentRepository implements IStudentRepository {
     }
 
     @Override
-    public List<Student> sortByName(String sortby) {
-        List<Student> students = new ArrayList<>();
+    public List<StudentDTO> sortByName(String sortby) {
+        List<StudentDTO> students = new ArrayList<>();
         try {
-            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("select * from student order by "+sortby);
+            PreparedStatement ps = BaseRepository.getConnection().
+                    prepareStatement("select student.id,student.name,address,point,c.name as nameClass from student join classroom c on student.id_Class = c.id\n" +
+                            "    order by "+sortby);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String address = rs.getString("address");
                 double point = rs.getDouble("point");
-                students.add(new Student(id, name, address, point));
+                String nameClass = rs.getString("nameClass");
+                students.add(new StudentDTO(id, name, address, point,nameClass));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

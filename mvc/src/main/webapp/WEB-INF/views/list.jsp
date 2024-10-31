@@ -34,9 +34,17 @@
         <thead>
         <tr>
             <th>Số thứ tự</th>
-            <th>Họ & tên<button class="btn bg-black border-0" onclick="window.location.href='/student?action=sort&sortby=name'"><i class="bi bi-sort-alpha-down"></i></button></th>
+            <th>Họ & tên
+                <button class="btn bg-black border-0" onclick="window.location.href='/student?action=sort&sortby=name'">
+                    <i class="bi bi-sort-alpha-down"></i></button>
+            </th>
             <th>Địa chỉ</th>
-            <th>Điểm<button class="btn bg-black border-0" onclick="window.location.href='/student?action=sort&sortby=point'"><i class="bi bi-sort-numeric-down"></i></button></th>
+            <th>Lớp</th>
+            <th>Điểm
+                <button class="btn bg-black border-0"
+                        onclick="window.location.href='/student?action=sort&sortby=point'"><i
+                        class="bi bi-sort-numeric-down"></i></button>
+            </th>
             <th>Xếp hạng</th>
             <th>Hành động</th>
         </tr>
@@ -47,6 +55,7 @@
                 <td>${status.count}</td>
                 <td>${student.name}</td>
                 <td>${student.address}</td>
+                <td>${student.nameClass}</td>
                 <td>${student.point}</td>
                 <td>
                     <c:choose>
